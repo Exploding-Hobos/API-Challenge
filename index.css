@@ -1,0 +1,27 @@
+body {
+    background-size: cover;
+    background-image: url(Assets/brick.jpg);
+    color: white;
+}
+
+.hero {
+    background-color: red;
+}
+
+
+
+.container {
+    text-align: center;
+    width: 100%;
+    background-color: red;
+    z-index: 100;
+    opacity: 0.8;
+}
+
+
+
+
+
+.controls {
+    
+}
