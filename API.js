@@ -15,7 +15,7 @@ const nav = document.querySelector('nav');
 //RESULTS SECTION
 const section = document.querySelector('section');
 
-// nav.style.display = 'none';
+nav.style.display = 'none';
 
 let pageNumber = 0;
 let displayNav = false;
@@ -28,9 +28,9 @@ searchForm.addEventListener('submit', fetchResults);
 function fetchResults(e) {
     e.preventDefault();
 
-    url = baseURL + '?api_id' + appId + '?api_key=' + key + '&q=' + searchTerm.value;
+    url = baseURL + '?q=' + searchTerm.value + '&app_id=' + appId + '&app_key=' + key;
     console.log("URL:", url);
-
+    
     fetch(url).then(function(result) {
         return result.json();
     }).then(function(json) {
@@ -40,23 +40,26 @@ function fetchResults(e) {
 }
 
 function displayResults(json) {
-
+    console.log(json);
     while (section.firstChild) {
         section.removeChild(section.firstChild);
     }
 
-    let articles = json.response.docs;
-
-    if(articles.length === 10) {
+    let recipes = json.hits;
+    
+    
+    
+    // console.log(recipes);
+    if(recipes.length === 10) {
         nav.style.display = 'block';
     } else {
         nav.style.display = 'none';
     }
 
-    if (articles.lenth === 0) {
+    if (recipes.length === 0) {
         console.log("no results");
     } else {
-        for(let i = 0; i < articles.length; i++) {
+        for(let i = 0; i < recipes.length; i++) {
             let article = document.createElement('article');
             let heading = document.createElement('h2');
             let link = document.createElement('a');
@@ -64,24 +67,28 @@ function displayResults(json) {
             let para = document.createElement('p');
             let clearfix = document.createElement('div');
 
-            let current = articles[i];
-            console.log('Current:', current);
+            let current = recipes[i]; //hits
+            // console.log('Current:', current);
 
-            link.href = current.web_url;
-            link.textContent = current.headline.main;
+            link.href = current.recipe.url;
+            link.textContent = current.recipe.label;
+            img.src = current.recipe.image;
+            img.alt = current.recipe.label;
+            para.textContent = 'Ingredients: ';
 
-            para.textContent = 'Keywords: ';
+            // if (current.recipe.image.length > 0) {
+            //     img.src = 'http://www.nytimes.com/' + current.multimedia[0].url;
+            //     img.alt = current.headline.main;
+            //   }
 
-            for(let j = 0; j < current.keywords.length; j++) {
+            for(let j = 0; j < current.recipe.ingredientLines.length; j++) {
                 let span = document.createElement('span');
-                span.textContent += current.keywords[j].value + ' ';
+                span.textContent += current.recipe.ingredientLines[j]+ ', '; 
                 para.appendChild(span);
             }
-
-            if(current.multimedia.length > 0) {
-                img.src = 'http://www.nytimes.com/' + current.multimedia[0].url;
-                img.alt = current.headline.main;
-            }
+            para.textContent += "Will yield " + current.recipe.yield + " servings" ;
+            
+            
 
             clearfix.setAttribute('class', 'clearfix');
 
@@ -95,18 +102,18 @@ function displayResults(json) {
     }
 };
 
-function nextPage(e) {
-    pageNumber++;
-    fetchResults(e);
-    console.log("Page number:", pageNumber);
-};
+// function nextPage(e) {
+//     pageNumber++;
+//     fetchResults(e);
+//     console.log("Page number:", pageNumber);
+// };
 
-function previousPage(e) {
-    if(pageNumber > 0) {
-        pageNumber--;
-    } else {
-        return;
-    }
-    fetchResults(e);
-    console.log("Page:", pageNumber);
-}
+// function previousPage(e) {
+//     if(pageNumber > 0) {
+//         pageNumber--;
+//     } else {
+//         return;
+//     }
+//     fetchResults(e);
+//     console.log("Page:", pageNumber);
+// }
