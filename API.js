@@ -21,8 +21,7 @@ let pageNumber = 0;
 let displayNav = false;
 
 searchForm.addEventListener('submit', fetchResults);
-// nextBtn.addEventListener('click', nextPage);
-// previousBtn.addEventListener('click', previousPage);
+
 
 //Fetch Results
 function fetchResults(e) {
@@ -46,10 +45,9 @@ function displayResults(json) {
     }
 
     let recipes = json.hits;
+
+    console.log(recipes)
     
-    
-    
-    // console.log(recipes);
     if(recipes.length === 10) {
         nav.style.display = 'block';
     } else {
@@ -67,8 +65,7 @@ function displayResults(json) {
             let para = document.createElement('p');
             let clearfix = document.createElement('div');
 
-            let current = recipes[i]; //hits
-            // console.log('Current:', current);
+            let current = recipes[i]; 
 
             link.href = current.recipe.url;
             link.textContent = current.recipe.label;
@@ -76,11 +73,7 @@ function displayResults(json) {
             img.alt = current.recipe.label;
             para.textContent = 'Ingredients: ';
 
-            // if (current.recipe.image.length > 0) {
-            //     img.src = 'http://www.nytimes.com/' + current.multimedia[0].url;
-            //     img.alt = current.headline.main;
-            //   }
-
+        
             for(let j = 0; j < current.recipe.ingredientLines.length; j++) {
                 let span = document.createElement('span');
                 span.textContent += current.recipe.ingredientLines[j]+ ', '; 
@@ -102,18 +95,4 @@ function displayResults(json) {
     }
 };
 
-// function nextPage(e) {
-//     pageNumber++;
-//     fetchResults(e);
-//     console.log("Page number:", pageNumber);
-// };
 
-// function previousPage(e) {
-//     if(pageNumber > 0) {
-//         pageNumber--;
-//     } else {
-//         return;
-//     }
-//     fetchResults(e);
-//     console.log("Page:", pageNumber);
-// }
